@@ -34,7 +34,7 @@ public class LoginServlets extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
 	 *      response)
 	 */
-	protected void processRequest(HttpServletRequest request, HttpServletResponse response)
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		response.setContentType("text/html;charset=UTF-8");
 
@@ -44,7 +44,7 @@ public class LoginServlets extends HttpServlet {
 		UserDao dao=new UserDao(ConnectionProvider.getConnection());
 		user u=dao.GetUSerByEmailAndPsssword(userEmail,userPassword);
 		if(u==null) {
-			System.out.println("invalid details....Try again");
+			out.println("invalid details....Try again");
 			
 			
 		}else {
