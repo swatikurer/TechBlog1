@@ -64,8 +64,8 @@
 							</div>
 							<div class="form-group">
 								<label for="exampleInputPassword1">Gender</label> <br> <input
-									type="radio" id="gender" name="gender">male <input
-									type="radio" id="gender" name="gender">female
+									type="radio" id="gender" name="gender" value="male">male <input
+									type="radio" id="gender" name="gender" value="female">female
 							</div>
 
 							<div class="form-group">
@@ -133,7 +133,7 @@
 							
 						
 						swal({
-							text : "Registration is successful!",
+							text : "Registration is successful!We take you to login page",
 							icon : "success",
 							button : "OK"})
 							.then((value) => {

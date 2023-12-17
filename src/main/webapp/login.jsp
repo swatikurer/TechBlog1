@@ -1,3 +1,4 @@
+<%@page import="com.tech.blog.entities.message"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html>
@@ -39,18 +40,34 @@
 							<p>login here</p>
 
 						</div>
+
+						<%
+						message m = (message) session.getAttribute("msg");
+						if (m != null) {
+						%>
+						<div class="alert <%=m.getCSSclass() %>" role="alert">
+						<%=m.getContent() %>
+						</div>
+
+						<%
+						session.removeAttribute("msg");
+						}
+						%>
+
+
 						<div class="card-body">
 							<form action="LoginServlets" method="POST">
 								<div class="form-group">
-									<label for="exampleInputEmail1">Email address</label> <input name="email" required
-										type="email" class="form-control" id="exampleInputEmail1"
-										aria-describedby="emailHelp" placeholder="Enter email">
-									<small id="emailHelp" class="form-text text-muted">We'll
-										never share your email with anyone else.</small>
+									<label for="exampleInputEmail1">Email address</label> <input
+										name="email" required type="email" class="form-control"
+										id="exampleInputEmail1" aria-describedby="emailHelp"
+										placeholder="Enter email"> <small id="emailHelp"
+										class="form-text text-muted">We'll never share your
+										email with anyone else.</small>
 								</div>
 								<div class="form-group">
-									<label for="exampleInputPassword1">Password</label> <input name="password"
-										type="password" class="form-control"
+									<label for="exampleInputPassword1">Password</label> <input
+										name="password" type="password" class="form-control"
 										id="exampleInputPassword1" placeholder="Password">
 								</div>
 								<!-- <div class="form-check">
@@ -59,8 +76,9 @@
 										for="exampleCheck1">Check me out</label>
 								</div> -->
 								<div class="container text-center">
-								<button type="submit" class="btn btn-primary">Submit</button></div>
-								
+									<button type="submit" class="btn btn-primary">Submit</button>
+								</div>
+
 							</form>
 						</div>
 					</div>

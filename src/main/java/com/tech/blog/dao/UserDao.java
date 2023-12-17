@@ -73,4 +73,26 @@ public user GetUSerByEmailAndPsssword(String email,String password) {
 	return userr;
 
 }
+public boolean updateUser(user userr) {
+	boolean f=false;
+	try {
+		String query="update user set name=? , email=? ,password=?, gender=? ,about=?,profile=? where id=?";
+		PreparedStatement p=con.prepareStatement(query);
+		p.setString(1, userr.getName());
+		p.setString(2, userr.getEmail());
+		p.setString(3, userr.getPassword());
+		p.setString(4, userr.getGender());
+		p.setString(5, userr.getAbout());
+		p.setString(6, userr.getProfile());
+		p.setInt(7, userr.getId());
+		p.executeUpdate();
+		f=true;
+		
+		
+	} catch (Exception e) {
+		e.printStackTrace();
+		// TODO: handle exception
+	}
+	return f;
+}
 }
