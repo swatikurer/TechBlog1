@@ -1,7 +1,10 @@
-
+j
+<%@page import="com.tech.blog.helper.ConnectionProvider"%>
 <%@page import="com.tech.blog.entities.user"%>
-
+<%@page import="com.tech.blog.dao.postDao"%>
 <%@page errorPage="Error_page.jsp"%>
+<%@ page import="java.util.ArrayList"%>
+<%@page import="com.tech.blog.entities.Category"%>
 
 <%
 user userr = (user) session.getAttribute("currentUser");
@@ -9,9 +12,6 @@ if (userr == null) {
 	response.sendRedirect("login.jsp");
 }
 %>
-
-
-
 
 
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
@@ -66,7 +66,12 @@ if (userr == null) {
 						<div class="dropdown-divider"></div>
 						<a class="dropdown-item" href="#">Something else here</a>
 					</div></li>
-				<li class="nav-item"><a class="nav-link" href="#">Contact</a></li>
+				<li class="nav-item"><a class="nav-link" href="#"><span
+						class="fa fa-address-card-o"></span>Contact</a></li>
+				<li class="nav-item"><a class="nav-link" href="#"
+					data-toggle="modal" data-target="#add-post-modal"><span
+						class="fa fa-astrict"></span>Do Post</a></li>
+
 
 			</ul>
 			<ul class="navbar-nav mr-right">
@@ -141,7 +146,8 @@ if (userr == null) {
 					<div id="profile-edit" style="display: none">
 						<h3 class="mt-2  text-center">Edit your profile here</h3>
 
-						<form action="EditServlets" method="post" enctype="multipart/form-data">
+						<form action="EditServlets" method="post"
+							enctype="multipart/form-data">
 							<table class="table">
 								<tr>
 									<th scope="row">ID :</th>
@@ -169,30 +175,22 @@ if (userr == null) {
 								<tr>
 									<th scope="row">Gender :</th>
 									<td><%=userr.getGender().toUpperCase()%></td>
-
 								</tr>
 								<tr>
 									<th scope="row">About:</th>
-									<td>
-									<textarea rows="3" class="form-control" name="user_about"><%=userr.getAbout()%></textarea>"</td>
-
+									<td><textarea rows="3" class="form-control"
+											name="user_about"><%=userr.getAbout()%></textarea>"</td>
 								</tr>
-										<tr>
+								<tr>
 									<th scope="row">New profile:</th>
-									<td>
-									<input type="file" name="image" class="form-control"></td>
-
+									<td><input type="file" name="image" class="form-control"></td>
 								</tr>
-
 							</table>
 							<div>
-							<button  type="submit"
-								class="btn btn-primary btn-center ">Save</button></div>
-
+								<button type="submit" class="btn btn-primary btn-center ">Save</button>
+							</div>
 						</form>
-
 					</div>
-
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-secondary"
@@ -203,12 +201,73 @@ if (userr == null) {
 			</div>
 		</div>
 	</div>
+	<!--profile modal ends 
+	
 
+	add post modal -->
 
-	<!--profile modal ends  -->
+	<!-- Modal -->
+	<div class="modal fade" id="add-post-modal" tabindex="-1" role="dialog"
+		aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLabel">Provide post
+						details</h5>
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<form id="add-post-form" action="addPostServlet" method="post">
+						<div class="form-group">
+							<select class="form-control" name="cid">
+								<option selected disabled>---Select Category---</option>
+								<%
+								postDao postD = new postDao(ConnectionProvider.getConnection());
+								ArrayList<Category> list = postD.getAllCategories();
+								for (Category c : list) {
+								%>
+								<option vlaue="<%=c.getCid()%>"><%=c.getName()%></option>
+								<%
+								}
+								%>
+							</select>
+						</div>
+						<div class="form-group">
+							<input type="text" name="pTitle" placeholder="Enter post title"
+								class="form-control">
+						</div>
+						<div class="form-group">
+							<textarea name="pContent" style="height: 200px;"
+								placeholder="Enter your content" class="form-control"></textarea>
+						</div>
+						<div class="form-group">
+							<textarea name="pCode" style="height: 200px;"
+								placeholder="Enter your program(if any)" class="form-control"></textarea>
+						</div>
+						<div class="form-group">
+							<label>Choose your pic</label><br> <input name="pic"
+								type="file">
+						</div>
+						<div class="container text-center">
+						<button type="submit" class="btn btn-outline-primary" >Post
+						</button>
+						 
+						</div>
+					</form>
+				</div>
+				
+			</div>
+		</div>
+	</div>
 
+	<!--  end of add post modal-->
 
-
+	<%
+	session.removeAttribute("msg");
+	%>
 
 
 	<!--  java script-->
@@ -244,6 +303,36 @@ if (userr == null) {
 		});
 	</script>
 
+	<!-- NOw add post js -->
+	<script>
+		$(document).ready(function(e) {
+			alert("loaded... ")
+			$("#add-post-form").on("submit", function(event) {
+				//this code get called when form is submitted
+				event.preventDefault();
+				console.log("you have submitted.... ")
+				
+				let form= new FormData(this);
+				
+				//now requesting to server
+				$.ajax({
+					url: "addPostServlet",
+					type: 'post',
+					data: form,
+					success: function(data,textStatus,jqXHR){
+						//success...
+						console.log(data);
+					},
+				error: function(jqXHR,textStatus,errorThrown){
+					
+				},
+				processData: false,
+				contentType: false
+				})
+
+			})
+		})
+	</script>
 
 </body>
 </html>

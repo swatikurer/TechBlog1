@@ -37,5 +37,5 @@ public class Helper {
 		
 		return f;
 	}
-
+///TechBlog/src/main/webapp/pics
 }

@@ -15,6 +15,7 @@ import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
 
 import com.tech.blog.dao.UserDao;
+import com.tech.blog.entities.message;
 import com.tech.blog.entities.user;
 import com.tech.blog.helper.ConnectionProvider;
 import com.tech.blog.helper.Helper;
@@ -60,6 +61,7 @@ public class EditServlets extends HttpServlet {
 			userr.setName(userName);
 			userr.setPassword(userPassword);
 			userr.setAbout(userAbout);
+			String oldFile=userr.getProfile();
 			userr.setProfile(imagename);
 			
 			//update database
@@ -69,17 +71,26 @@ public class EditServlets extends HttpServlet {
 				out.println("updated successfully");
 				///TechBlog/src/main/webapp/pics
 				
-				String path=request.getRealPath("/")+"pics"+File.separator +userr.getPassword();
-			Helper.deleteFile(path);
+				String path=request.getRealPath("/")+"pics"+File.separator +userr.getProfile();
+				//delete old profile
+				String patholdFile=request.getRealPath("/")+"pics"+File.separator +oldFile;
+				if(!oldFile.equals("default.png")) {
+			Helper.deleteFile(patholdFile);}
+			
 					if(Helper.saveFile(part.getInputStream(), path)) {
 						out.println("profile updated successfully");
+						message msg=new message("profile updated successfully ","success","alert-success");
+						s.setAttribute("msg", msg);
 					}
 				
 				
 			}
 			else {
 				out.println("Not updated ");
+				message msg=new message("Something went wrong ","error","alert-danger");
+				s.setAttribute("msg", msg);
 			}
+			response.sendRedirect("profile.jsp");
 			
 		}
 		
