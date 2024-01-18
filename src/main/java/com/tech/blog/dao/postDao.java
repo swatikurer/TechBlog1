@@ -1,4 +1,4 @@
-package com.tech.blog.dao;
+ package com.tech.blog.dao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -46,14 +46,14 @@ public boolean savePost(Post p) {
 	
 	boolean f=false;
 	try {
-		String q="insert into posts(pTitle,pContent,pCode,ppic,catid,postid) values(?,?,?,?,?,?)";
+		String q="insert into posts(pTitle,pContent,pCode,ppic,catid,userid) values(?,?,?,?,?,?)";
 		PreparedStatement ps=con.prepareStatement(q);
 		ps.setString(1,p.getpTitle());
 		ps.setString(2,p.getpContent());
 		ps.setString(3,p.getpCode());
 		ps.setString(4,p.getpPic());
 		ps.setInt(5,p.getCatid());
-		ps.setInt(6,p.getPid());
+		ps.setInt(6,p.getUserid());
 		ps.executeUpdate();
 		f=true;
 		

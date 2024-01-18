@@ -1,5 +1,6 @@
 package com.tech.blog.servlets;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 
@@ -16,6 +17,7 @@ import com.tech.blog.dao.postDao;
 import com.tech.blog.entities.Post;
 import com.tech.blog.entities.user;
 import com.tech.blog.helper.ConnectionProvider;
+import com.tech.blog.helper.Helper;
 
 /**
  * Servlet implementation class addPostServlet
@@ -41,7 +43,7 @@ public class addPostServlet extends HttpServlet {
 		response.setContentType("text/html;charset=UTF-8");
 		try(PrintWriter out=response.getWriter()){
 			
-			int cid=Integer.parseInt(request.getParameter("cid"));
+			int Cid=Integer.parseInt(request.getParameter("cid"));
 			String pTitle=request.getParameter("pTitle");
 			String pContent=request.getParameter("pContent");
 			String pCode=request.getParameter("pCode");
@@ -53,13 +55,17 @@ public class addPostServlet extends HttpServlet {
 			
 		
 		
-		out.println("your pic title is" + pTitle);
-		out.println(part.getSubmittedFileName());
+		//out.println("your pic title is" + pTitle);
+		//out.println(part.getSubmittedFileName());
 		
-		Post p=new Post(pTitle,pContent,pCode,part.getSubmittedFileName(),null,cid,userr.getId());
+		Post p=new Post(pTitle,pContent,pCode,part.getSubmittedFileName(),null,Cid,userr.getId());
 		postDao dao=new postDao(ConnectionProvider.getConnection());
 		if(dao.savePost(p)) {
-			out.println("DOne");
+			
+			String path=request.getRealPath("/")+"blog_pics"+File.separator +part.getSubmittedFileName();
+			Helper.saveFile(part.getInputStream(),path);
+			out.println("Done");
+
 			
 		}
 		else {

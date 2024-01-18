@@ -229,9 +229,9 @@ if (userr == null) {
 								ArrayList<Category> list = postD.getAllCategories();
 								for (Category c : list) {
 								%>
-								<option vlaue="<%=c.getCid()%>"><%=c.getName()%></option>
+								<option value="<%=c.getCid()%>"><%=c.getName()%></option>
 								<%
-								}
+								} 
 								%>
 							</select>
 						</div>
@@ -282,6 +282,7 @@ if (userr == null) {
 		src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
 		integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
 		crossorigin="anonymous"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
 	<script src="js/myjs.js" type="text/javascript"></script>
 	<script>
 		$(document).ready(function() {
@@ -322,8 +323,14 @@ if (userr == null) {
 					success: function(data,textStatus,jqXHR){
 						//success...
 						console.log(data);
+						if(data.trim()=='done'){
+							swal("Good job!", "You have posted", "success");
+						}else{
+							swal("Error!", "Something went wrong try again...", "error");
+						}
 					},
 				error: function(jqXHR,textStatus,errorThrown){
+					swal("Error!", "Something went wrong try again...", "error");
 					
 				},
 				processData: false,

@@ -69,9 +69,10 @@ public class EditServlets extends HttpServlet {
 			boolean ans=userdao.updateUser(userr);
 			if(ans==true) {
 				out.println("updated successfully");
-				///TechBlog/src/main/webapp/pics
+			
 				
 				String path=request.getRealPath("/")+"pics"+File.separator +userr.getProfile();
+				
 				//delete old profile
 				String patholdFile=request.getRealPath("/")+"pics"+File.separator +oldFile;
 				if(!oldFile.equals("default.png")) {
@@ -81,6 +82,7 @@ public class EditServlets extends HttpServlet {
 						out.println("profile updated successfully");
 						message msg=new message("profile updated successfully ","success","alert-success");
 						s.setAttribute("msg", msg);
+						
 					}
 				
 				
